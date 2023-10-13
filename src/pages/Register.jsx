@@ -2,13 +2,13 @@ import React, { useState } from "react";
 import { auth, storage } from "../firebase";
 import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
 import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
-import {doc, setDoc} from "firebase/firestore";
+import { doc, setDoc } from "firebase/firestore";
 import { db } from "../firebase";
-
-
+import { useNavigate, Link } from "react-router-dom";
 
 const Register = () => {
   const [err, setErr] = useState(false);
+  const navigate = useNavigate();
   const [errMessage, setErrmessage] = useState("");
 
   const handleSubmit = async (e) => {
@@ -19,63 +19,51 @@ const Register = () => {
     console.log(email);
     const password = e.target.password.value;
     const avatar = e.target.avatar.files[0];
-   
 
     try {
       const res = await createUserWithEmailAndPassword(auth, email, password);
-
       const user = res.user;
       console.log(user);
       window.alert("User Created Successfully");
-      const storageRef = ref(storage, displayName);
-      const uploadTask = uploadBytesResumable(storageRef, avatar);
 
+      //Unique image name
+      const data = new Date().getTime();
+      const storageRef = ref(storage, `${displayName + data}`);
 
-      uploadTask.on(
-          
-        
-        (error) => {
-          setErr(true);
-          setErrmessage(error.message);
-          // Handle unsuccessful uploads
-        },
-        () => {
-          
-          
-          // Handle successful uploads on complete
-          // For instance, get the download URL: https://firebasestorage.googleapis.com/...
-          getDownloadURL(uploadTask.snapshot.ref).then( async(downloadURL) => {
-            console.log("File available at", downloadURL);
-
+      await uploadBytesResumable(storageRef, avatar).then(() => {
+        getDownloadURL(storageRef).then(async (downloadURL) => {
+          try {
             await updateProfile(res.user, {
               displayName: displayName,
-              photoURL: downloadURL
-            })
+              photoURL: downloadURL,
+            });
 
             await setDoc(doc(db, "users", res.user.uid), {
               uid: res.user.uid,
               displayName: displayName,
               email: email,
-              photoURL: downloadURL
+              photoURL: downloadURL,
             });
-    
-
-          });
-        }
-      );
 
 
-        // Storing the user to database
+            await setDoc(doc(db, "userChats", res.user.uid), {
+              navigate: navigate("/"),
+              
+            });
 
-
-
-
+          } catch (err) {
+            console.log(err);
+            SetErr(true);
+            //setLoading(false);
+          }
+        });
+      });
     } catch (error) {
       setErr(true);
+      //setLoading(false);
       const errorCode = error.code;
       const errorMessage = error.message;
       console.log(errorCode, errorMessage);
-
       if (errorCode === "auth/email-already-in-use") {
         setErrmessage("Email already in use");
       } else if (errorCode === "auth/invalid-email") {
@@ -86,29 +74,7 @@ const Register = () => {
         );
       }
     }
-    // ..
   };
-
-  // Image Upload
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
   return (
     <div class="container d-flex flex-column align-items-center justify-content-center min-vh-100">
@@ -167,7 +133,7 @@ const Register = () => {
           {err && (
             <p style={{ color: "red", fontSize: "15px" }}>{errMessage}</p>
           )}
-          <p>Don't have an accout? Register</p>
+          <p>Have an account? <Link to="/login">Login</Link></p>
         </form>
       </div>
     </div>
