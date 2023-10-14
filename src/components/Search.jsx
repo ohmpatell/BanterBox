@@ -1,25 +1,126 @@
-import React from 'react'
+import React, { useContext } from 'react'
+import { useState } from 'react'
+import { db } from '../firebase'
+import { collection, doc, query, serverTimestamp, setDoc, updateDoc } from 'firebase/firestore';
+import { getDocs, where } from 'firebase/firestore';
+import { AuthContext } from '../context/AuthContext';
+import { getDoc } from 'firebase/firestore';
+import { getDownloadURL, ref, uploadBytesResumable } from 'firebase/storage';
+import { storage } from '../firebase';
+
+
 
 const Search = () => {
+
+  const [username, setUsername] = useState("");
+  const [user, setUser] = useState({});
+  const [err, setErr] = useState(false);
+  const [errMessage, setErrmessage] = useState("");
+
+  const { currentUser } = useContext(AuthContext);
+
+  const searchUser = async () => {
+    const q = query(collection(db, "users"), where("displayName", "==", username));
+
+
+    try {
+    const querySnapshot = await getDocs(q);
+    querySnapshot.forEach((doc) => {
+      setUser(doc.data());
+    });
+
+    } catch (e) {
+      console.log(e.code);
+      setErr(true);
+      setErrmessage(e.code);
+    }
+
+
+  }
+  const keyPress = (e) => {
+    e.code === "Enter" && searchUser();
+  }
+
+
+
+  const handleSelect = async () => {
+    
+    const combinedId = currentUser.uid > user.uid ? currentUser.uid + user.uid : user.uid + currentUser.uid;
+    try {
+      const res = await getDoc(doc(db, "chats", combinedId));
+      console.log(res.exists());
+      console.log(res.data());
+      
+      if(!res.exists()){
+
+        await setDoc(doc(db, "chats", combinedId), {
+          messages: []
+        });
+      
+        await updateDoc(doc(db, "userChats", currentUser.uid), {
+          [combinedId+".userInfo"]: {
+            uid: user.uid,
+            displayName: user.displayName,
+            photoURL: user.photoURL,
+          },
+          [combinedId+".date"]: serverTimestamp(),
+        
+        });
+
+        await updateDoc(doc(db, "userChats", user.uid), {
+          [combinedId+".userInfo"]: {
+            uid: currentUser.uid,
+            displayName: currentUser.displayName,
+            photoURL: currentUser.photoURL,
+          },
+          [combinedId+".date"]: serverTimestamp(),
+        
+        });
+
+      }
+
+    } catch (error) {
+      console.log(error);
+    }
+  
+    setUsername("");
+    setUser(null);
+
+  }
+
+
+
+
+
   return (
+
     <div className="search-container">
       <input 
         type="text"
         className="form-control"
         placeholder="Search..."
-        style={{ width: '100%', height: '40px', borderRadius: '0px', borderTop: 'black 1px solid'}}
         // Add an event handler here for search functionality
+        onKeyDown={keyPress}
+        
+        onChange={(e) => 
+          setUsername(e.target.value)
+        }
+        value={username}
       />
-      <div className="friend-container" >
-        <div className="friend">
+
+      {err && (
+        <p style={{ color: "red", fontSize: "15px" }}>{errMessage}</p>
+      )}
+
+      {user && (
+        <div className="friend" onClick={handleSelect}>
             <img
-                src="src/images/avatar.png"
-                alt="Avatar"
-                style={{ width: '30px', height: '30px', borderRadius: '50%', marginRight: '10px' }}
+                src={user.photoURL}
             />
-            <span className="mr-2">Friend Name</span>
-        </div>
+            <span className="mr-2">{user.displayName}</span>
       </div>
+      )}
+
     </div>
   )
 }

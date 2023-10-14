@@ -1,6 +1,17 @@
+import { signOut } from 'firebase/auth'
 import React from 'react'
+import { auth } from '../firebase'
+import { useContext } from 'react'
+import { AuthContext } from '../context/AuthContext'
 
 const Navbar = () => {
+
+  const { currentUser } = useContext(AuthContext);
+  if(currentUser.photoURL == null || currentUser.photoURL == undefined){
+    currentUser.photoURL = 'src/images/avatar.png'
+  }
+
+
   return (
     <nav className="navbar navbar-expand-lg navbar-light bg-light">
       <div className="container-fluid">
@@ -16,13 +27,13 @@ const Navbar = () => {
         {/* Profile information on the right */}
         <div className="d-flex align-items-center">
           <img
-            src="src/images/avatar.png"
+            src={currentUser.photoURL}
             alt="Avatar"
             style={{ width: '30px', height: '30px', borderRadius: '50%', marginRight: '10px' }}
           />
-          <a href="#" className="btn btn-outline-primary btn-sm">
+          <button className="btn btn-outline-primary btn-sm" onClick={() => signOut(auth)}>
             Logout
-          </a>
+          </button>
           
         </div>
       </div>

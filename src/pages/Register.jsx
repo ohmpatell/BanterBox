@@ -24,7 +24,6 @@ const Register = () => {
       const res = await createUserWithEmailAndPassword(auth, email, password);
       const user = res.user;
       console.log(user);
-      window.alert("User Created Successfully");
 
       //Unique image name
       const data = new Date().getTime();
@@ -47,10 +46,9 @@ const Register = () => {
 
 
             await setDoc(doc(db, "userChats", res.user.uid), {
-              navigate: navigate("/"),
               
             });
-
+              navigate("/");
           } catch (err) {
             console.log(err);
             SetErr(true);

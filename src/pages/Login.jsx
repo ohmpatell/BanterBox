@@ -17,14 +17,23 @@ const Login = () => {
 
         try {
             await signInWithEmailAndPassword(auth, email, password);
-            window.alert("Login Successful");
             navigate("/");
         }
 
         catch (err) {
             setErr(true);
-            setErrmessage(err.message);
-            console.log(err.message);
+            setErrmessage(err.code);
+            if (err.code === "auth/invalid-login-credentials") {
+                setErrmessage("Invalid email or password");
+            }
+
+            else{
+                setErrmessage("Something went wrong");
+            }
+            
+
+
+
         }
     };
  
@@ -45,6 +54,9 @@ const Login = () => {
                     <input type="password" className="form-control" id="password" name="password" required/>
                 </div>
                 <button type="submit" className="btn btn-warning">Login</button>
+                {err && (
+            <p style={{ color: "red", fontSize: "15px" }}>{errMessage}</p>
+          )}
                 <p>Don't have an accout? <Link to="/register">Register</Link></p>
             </form>
         </div>

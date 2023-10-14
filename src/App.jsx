@@ -8,7 +8,6 @@ import { AuthContext } from "./context/AuthContext.jsx";
 
 
 
-
 function App() {
   const { currentUser } = useContext(AuthContext);
 
