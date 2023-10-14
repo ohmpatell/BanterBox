@@ -5,7 +5,6 @@ import Sidebar from '../components/Sidebar'
 const Home = () => {
   return (
 
-
 <div className="d-flex home-container" id="wrapper">
     <div className="wrapper">
     <div className='sidebar'>< Sidebar/></div>
