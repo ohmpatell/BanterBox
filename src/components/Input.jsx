@@ -82,6 +82,7 @@ const Input = () => {
           className="text-input"
 
           onChange={(e) => setText(e.target.value)}
+          onKeyPress={(e) => e.key === "Enter" && handleSend()}
           value={text}
 
         />

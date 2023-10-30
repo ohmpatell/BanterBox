@@ -98,6 +98,7 @@ const Search = () => {
       {user && (
         <div className="friend" onClick={handleSelect}>
             <img
+                className='search-user-image'
                 src={user.photoURL}
             />
             <span className="mr-2">{user.displayName}</span>
