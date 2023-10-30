@@ -252,7 +252,11 @@ $owner-bgcolor: #4b4c4a;
 
 }
 
+// Message Box
 
+.message-box{
+    width: 100%;
+}
 
 // CHAT BUBBLE
 
@@ -265,13 +269,52 @@ $owner-bgcolor: #4b4c4a;
     padding: 10px;
     overflow-y: scroll;
     height: 100%;
-    .message{
-        display: flex;
-        flex-direction: row;
-        align-items: center;
-        justify-content: flex-start;
-        gap: 10px;
-       .messageInfo{
+    
+}
+
+.message{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 10px;
+   .messageInfo{
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        span{
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+    }
+    
+    
+    .messageContent{
+        padding: 10px;
+        max-width: 70vw;
+        word-wrap: break-word;
+        
+        p{
+                    
+        background-color: $sidebar-bgcolor;
+        border-radius: 10px 10px 10px 0px;
+        word-wrap: break-word;    
+        padding: 10px;    
+        }
+
+
+        img{
+            height: 20vh;
+            width: 20vw;
+            border-radius: 10px 10px 10px 0px;
+            max-width: 70px;
+        }
+    }
+
+    &.owner{
+        flex-direction: row-reverse;
+        margin-left: auto;
+        .messageInfo{
             width: 40px;
             height: 40px;
             border-radius: 50%;
@@ -280,74 +323,39 @@ $owner-bgcolor: #4b4c4a;
                 font-weight: 600;
             }
         }
-        
-        
         .messageContent{
-            padding: 10px;
-            max-width: 70vw;
-            word-wrap: break-word;
-            
-            p{
-                        
-            background-color: $sidebar-bgcolor;
-            border-radius: 10px 10px 10px 0px;
+        max-width: 70vw;
+        p{
+                    
+            background-color: $owner-bgcolor;
+            border-radius: 10px 10px 0px 10px;
             word-wrap: break-word;    
             padding: 10px;    
             }
 
-
-            img{
-                height: 20vh;
-                width: 20vw;
-                border-radius: 10px 10px 10px 0px;
-                max-width: 70px;
-            }
-        }
-
-        &.owner{
-            flex-direction: row-reverse;
-            margin-left: auto;
-            .messageInfo{
-                width: 40px;
-                height: 40px;
-                border-radius: 50%;
-                span{
-                    font-size: 0.8rem;
-                    font-weight: 600;
-                }
-            }
-            .messageContent{
-            max-width: 70vw;
-            p{
-                        
-                background-color: $owner-bgcolor;
-                border-radius: 10px 10px 0px 10px;
-                word-wrap: break-word;    
-                padding: 10px;    
-                }
-
-            img{
-                height: 20vh;
-                width: 20vw;
-                border-radius: 0px 10px 10px 10px;
-                max-width: 70px;
-            }
-
-            }
-        }
-
-        .messageImage{
+        img{
             height: 20vh;
             width: 20vw;
-            object-fit: contain;
-
-            img{
-                height: 100%;
-                width: 100%;
-                border-radius: 10px 0px 10px 10px;
-            }
+            border-radius: 0px 10px 10px 10px;
+            max-width: 70px;
         }
 
+        }
     }
+
+    .messageImage{
+        height: 20vh;
+        width: 20vw;
+        object-fit: contain;
+
+        img{
+            height: 100%;
+            width: 100%;
+            border-radius: 10px 0px 10px 10px;
+        }
+    }
+
 }
+
+
 

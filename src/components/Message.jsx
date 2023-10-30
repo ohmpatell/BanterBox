@@ -1,19 +1,39 @@
 import React from "react";
-import {
-  faVideo,
-  faEllipsisV,
-  faImage,
-  faFile,
-} from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { useContext } from "react";
+import { AuthContext } from "../context/AuthContext";
+import { ChatContext } from "../context/ChatContext";
+import { useRef } from "react";
+import { useEffect } from "react";
 
-const Message = () => {
+const Message = ({ message }) => {
+
+  
+  if (!message) {
+    return <div className="chat-area">Select a chat</div>;
+  }
+
+else{
+  const { currentUser } = useContext(AuthContext);
+  const { data } = useContext(ChatContext);
+
+
+  console.log("Messagessss: " + message);
+
+  const messageRef = useRef();
+
+  useEffect(() => {
+
+    if(messageRef.current){
+      messageRef.current.scrollIntoView({ behavior: "smooth" });
+    }
+
+  }, [message]);
+
   return (
-    <div className="chat-area">
-      <div className="message owner">
+      <div className= {`message ${message.senderId === currentUser.uid && "owner"}`}>
         <div className="messageInfo">
           <img
-            src="/src/images/avatar.png"
+            src={message.senderId === currentUser.uid ? currentUser.photoURL : data.user.photoURL}
             alt="User Avatar"
             className="avatar"
             style={{ width: "40px", height: "40px" }}
@@ -21,122 +41,21 @@ const Message = () => {
           <span>9:55</span>
         </div>
         <div className="messageContent">
-          <p className="messageText">Hello00000000000</p>
+          <p className="messageText">{message.text}</p>
+          {message.img && (
+            <img
+              src={message.img}
+              alt="message img"
+              className="messageImage"
+            />
+          )}
         </div>
       </div>
-
-      <div className="message">
-        <div className="messageInfo">
-          <img
-            src="/src/images/avatar.png"
-            alt="User Avatar"
-            className="avatar"
-            style={{ width: "40px", height: "40px" }}
-          />
-          <span>10:55</span>
-        </div>
-        <div className="messageContent">
-          <p className="messageText">Hello2</p>
-        </div>
-      </div>
-
-
-      <div className="message owner">
-        <div className="messageInfo">
-          <img
-            src="/src/images/avatar.png"
-            alt="User Avatar"
-            className="avatar"
-            style={{ width: "40px", height: "40px" }}
-          />
-          <span>9:55</span>
-        </div>
-        <div className="messageContent">
-          <p className="messageText">Hello00000000000</p>
-        </div>
-      </div>
-
-      <div className="message">
-        <div className="messageInfo">
-          <img
-            src="/src/images/avatar.png"
-            alt="User Avatar"
-            className="avatar"
-            style={{ width: "40px", height: "40px" }}
-          />
-          <span>10:55</span>
-        </div>
-        <div className="messageContent">
-          <p className="messageText">Hello2</p>
-        </div>
-      </div>
-
-      <div className="message owner">
-        <div className="messageInfo">
-          <img
-            src="/src/images/avatar.png"
-            alt="User Avatar"
-            className="avatar"
-            style={{ width: "40px", height: "40px" }}
-          />
-          <span>9:55</span>
-        </div>
-        <div className="messageContent">
-          <p className="messageText">Hello00000000000</p>
-        </div>
-      </div>
-
-      <div className="message">
-        <div className="messageInfo">
-          <img
-            src="/src/images/avatar.png"
-            alt="User Avatar"
-            className="avatar"
-            style={{ width: "40px", height: "40px" }}
-          />
-          <span>10:55</span>
-        </div>
-        <div className="messageContent">
-          <p className="messageText">Hello2</p>
-        </div>
-      </div>
-
-      <div className="message owner">
-        <div className="messageInfo">
-          <img
-            src="/src/images/avatar.png"
-            alt="User Avatar"
-            className="avatar"
-            style={{ width: "40px", height: "40px" }}
-          />
-          <span>9:55</span>
-        </div>
-        <div className="messageImage">
-          <img src="src/images/trialmessage.jpg" alt="Image" />
-        </div>
-      </div>
-
-      <div className="message">
-        <div className="messageInfo">
-          <img
-            src="/src/images/avatar.png"
-            alt="User Avatar"
-            className="avatar"
-            style={{ width: "40px", height: "40px" }}
-          />
-          <span>10:55</span>
-        </div>
-        <div className="messageContent">
-          <p className="messageText">Hello2</p>
-          <img src="src/images/trialmessage.jpg" alt="Image" />
-        </div>
-      </div>
-
-
+  
 
       
-    </div>
   );
+}
 };
 
 export default Message;

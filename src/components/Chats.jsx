@@ -4,34 +4,40 @@ import { db } from '../firebase'
 import { AuthContext } from '../context/AuthContext';
 import { useContext } from 'react'
 import { useState } from 'react'
+import { ChatContext } from '../context/ChatContext';
+
 const Chats = () => {
-    const [chats, setChats] = useState([])
-    const { currentUser } = useContext(AuthContext);
+    const [chats, setChats] = useState([]);
 
-    useEffect(() => {
+  const { currentUser } = useContext(AuthContext);
+  const { dispatch } = useContext(ChatContext);
 
-        const getChats = () => {
-        const unsub = onSnapshot(doc(db, "userChats", currentUser.uid), (doc) => {
-            setChats(doc.data())
-        }
-        );
+  useEffect(() => {
+    const getChats = () => {
+      const unsub = onSnapshot(doc(db, "userChats", currentUser.uid), (doc) => {
+        setChats(doc.data());
+      });
 
-        return () => {
-            unsub();
-        }
-        };
-        currentUser.uid && getChats();
-    }, [currentUser.uid])
+      return () => {
+        unsub();
+      };
+    };
 
+    currentUser.uid && getChats();
+  }, [currentUser.uid]);
+
+  const handleSelect = (u) => {
+    dispatch({ type: "CHANGE_USER", payload: u });
+  };
    
-    console.log(Object.entries(chats));
   return (
 
     <div className="recent-chat-container">
 
-{Object.entries(chats).map((chat) => (
+{Object.entries(chats)?.sort((a,b)=> b[1].date - a[1].date).map((chat) => (
     
-    <div className="mt-3 friend-container recent-container" key={chat[0]}>
+    <div className="mt-3 friend-container recent-container" key={chat[0]}
+        onClick={() => handleSelect(chat[1].userInfo)}>
       
         <div className="friend">
             <img
@@ -43,7 +49,7 @@ const Chats = () => {
         </div>
         <p className='last-chat' style={{
         
-        }}>{chat[1].userInfo.lastMessage?.text}</p>
+        }}>{chat[1].lastMessage?.text}</p>
 
     </div>
         ))}
