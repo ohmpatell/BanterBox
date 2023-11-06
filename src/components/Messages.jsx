@@ -10,6 +10,7 @@ import { onSnapshot } from "@firebase/firestore";
 
 const Messages = () => {
 
+  
 
 
   const [messages, setMessages] = useState([]);
@@ -25,8 +26,12 @@ const Messages = () => {
     };
   }, [data.chatId]);
 
-  console.log("Messages in MESSAGES.JSX", messages);
 
+  useEffect(() => {
+    const chatArea = document.querySelector(".chat-area");
+    chatArea.scrollTop = chatArea.scrollHeight;
+  }, [messages]);
+  
   return (
     <div className="chat-area">
 
