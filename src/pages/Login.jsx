@@ -41,7 +41,7 @@ const Login = () => {
     return (
 
     <div className="container d-flex flex-column align-items-center justify-content-center min-vh-100">
-        <img src="src/images/logo.png" alt="Logo" className="mb-4 logo" />
+        <img src="https://firebasestorage.googleapis.com/v0/b/banter-box-chatapp.appspot.com/o/logo.png?alt=media&token=6368418c-8212-459a-a47f-c2007036e983" alt="Logo" className="mb-4 logo" />
         <div className="card p-4 formWrapper">
             <p className="title">Login</p>
             <form action="" method="post" className="form" onSubmit={handleSubmit}>

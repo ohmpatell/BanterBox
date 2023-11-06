@@ -19,7 +19,7 @@ const ChatPanel = () => {
         <div className="chat-header">
           <div className="user-info">
             <img
-              src={data.user?.photoURL ? data.user?.photoURL : '/src/images/avatar.png'}
+              src={data.user?.photoURL ? data.user?.photoURL : 'https://firebasestorage.googleapis.com/v0/b/banter-box-chatapp.appspot.com/o/avatar.png?alt=media&token=84640cd9-9353-48b9-a17a-847c9f742f1f'}
               alt="User Avatar"
               className="avatar"
             />

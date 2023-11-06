@@ -18,7 +18,12 @@ const Register = () => {
     const email = e.target.email.value;
     console.log(email);
     const password = e.target.password.value;
-    const avatar = e.target.avatar.files[0];
+    let avatar = e.target.avatar.files[0];
+
+
+    if (avatar === undefined) {
+      avatar = "https://firebasestorage.googleapis.com/v0/b/banter-box-chatapp.appspot.com/o/avatar.png?alt=media&token=84640cd9-9353-48b9-a17a-847c9f742f1f";
+    }
 
     try {
       const res = await createUserWithEmailAndPassword(auth, email, password);
@@ -76,7 +81,7 @@ const Register = () => {
 
   return (
     <div class="container d-flex flex-column align-items-center justify-content-center min-vh-100">
-      <img src="src/images/logo.png" alt="Logo" className="mb-4 logo" />
+      <img src="https://firebasestorage.googleapis.com/v0/b/banter-box-chatapp.appspot.com/o/logo.png?alt=media&token=6368418c-8212-459a-a47f-c2007036e983" alt="Logo" className="mb-4 logo" />
       <div class="card p-4 formWrapper">
         <p className="title">Register</p>
         <form action="" method="post" className="form" onSubmit={handleSubmit}>

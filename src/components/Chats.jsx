@@ -41,7 +41,7 @@ const Chats = () => {
       
         <div className="friend">
             <img
-                src={chat[1].userInfo.photoURL ? chat[1].userInfo.photoURL : '/src/images/avatar.png'}
+                src={chat[1].userInfo.photoURL ? chat[1].userInfo.photoURL : 'https://firebasestorage.googleapis.com/v0/b/banter-box-chatapp.appspot.com/o/avatar.png?alt=media&token=84640cd9-9353-48b9-a17a-847c9f742f1f'}
                 alt="Avatar"
                 style={{ width: '30px', height: '30px', borderRadius: '50%', marginRight: '10px' }}
             />
