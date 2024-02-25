@@ -10,8 +10,6 @@ import Messages from './Messages.jsx';
 const ChatPanel = () => {
 
   const {data} = useContext(ChatContext);
-  console.log("DATA FROM CHATPANEL: ", data.chatId);
-
 
   return (
     <div className='chat-panel-container'>

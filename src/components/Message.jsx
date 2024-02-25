@@ -6,18 +6,14 @@ import { useRef } from "react";
 import { useEffect } from "react";
 
 const Message = ({ message }) => {
-
   
   if (!message) {
-    return <div className="chat-area">Select a chat</div>;
+    return <div className="chat-area"></div>;
   }
 
 else{
   const { currentUser } = useContext(AuthContext);
   const { data } = useContext(ChatContext);
-
-
-  console.log("Messagessss: " + message);
 
   const messageRef = useRef();
 
@@ -29,6 +25,8 @@ else{
 
   }, [message]);
 
+const messageTime = message.date.toDate().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: false });
+
   return (
       <div className= {`message ${message.senderId === currentUser.uid && "owner"}`}>
         <div className="messageInfo">
@@ -38,7 +36,8 @@ else{
             className="avatar"
             style={{ width: "40px", height: "40px" }}
           />
-          <span>9:55</span>
+        <span className="text-muted font-weight-normal">{messageTime}</span>
+
         </div>
         <div className="messageContent">
           <p className="messageText">{message.text}</p>
@@ -51,9 +50,6 @@ else{
           )}
         </div>
       </div>
-  
-
-      
   );
 }
 };
