@@ -19,7 +19,6 @@ const Input = () => {
 
     const handleSend = async () => {
       if (img) {
-        console.log('Uploading image... with ', img);
         const storageRef = ref(storage, uuid());
   
         const uploadTask = uploadBytesResumable(storageRef, img);
@@ -31,8 +30,6 @@ const Input = () => {
             console.error("Error uploading image:", error);
           },
           () => {
-            // Upload complete
-            console.log("Image upload complete!");
             getDownloadURL(uploadTask.snapshot.ref).then(async (downloadURL) => {
               await updateDoc(doc(db, "chats", data.chatId), {
                 messages: arrayUnion({
@@ -43,7 +40,6 @@ const Input = () => {
                   img: downloadURL,
                 }),
               });
-              console.log('Image uploaded:', downloadURL);
             });
           }
         );
@@ -76,8 +72,6 @@ const Input = () => {
       setText("");
       setImg(null);
     };
-  
-
     setText('');
     setImg(null);
     setImgPreview(null); 
@@ -85,8 +79,6 @@ const Input = () => {
 
   const handleImageChange = (e) => {
     const file = e.target.files[0];
-    console.log('Selected file:', file);
-  
     if (file) {
       const reader = new FileReader();
       reader.onload = () => {
@@ -95,11 +87,9 @@ const Input = () => {
       reader.readAsDataURL(file);
   
       setImg(file);
-      console.log('Image state:', file);
     }
   };
   
-
   const cancelImagePreview = () => {
     setImg(null);
     setImgPreview(null);

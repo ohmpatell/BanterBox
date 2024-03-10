@@ -1,6 +1,5 @@
 @import url('bootstrap/dist/css/bootstrap.min.css');
 
-
 // Color Palette
 $primary-bgcolor: #FDD835;
 $secondary-bgcolor: #FFFFFF;
@@ -18,11 +17,9 @@ $link-color: #0077B6;
   display: flex;
   align-items: center;
   justify-content: center;
-  justify-self: center;
-  align-self: center;
 }
 
-.home-container{
+.home-container {
   background-color: $primary-bgcolor;
   height: 100vh;
   display: flex;
@@ -31,6 +28,12 @@ $link-color: #0077B6;
   flex-direction: column;
 }
 
+@media only screen and (max-width: 600px) {
+  .home-container,
+  .container {
+    height: 100vh;
+  }
+}
 
 .wrapper {
   display: flex;
@@ -78,7 +81,6 @@ $link-color: #0077B6;
     align-items: center;
     cursor: pointer;
     background-color: $sidebar-bgcolor;
-
   }
 }
 
@@ -90,7 +92,6 @@ $link-color: #0077B6;
   padding: 10px;
   cursor: pointer;
   overflow: hidden;
-  
 
   .last-chat {
     color: $text-color;
@@ -166,14 +167,15 @@ $link-color: #0077B6;
     padding-bottom: 20px;
     position: relative;
   }
-  
+
   .image-preview-container {
     position: absolute;
-    bottom: 100%; 
+    bottom: 100%;
     left: 0;
     width: 100%;
     display: flex;
   }
+
   .image-preview {
     position: relative;
     display: inline-block;
@@ -181,16 +183,16 @@ $link-color: #0077B6;
     padding: 5px;
     border: 1px solid #ccc;
     border-radius: 5px;
-  
-      img {
-        max-width: 100%; 
-        max-height: 100%; 
-        width: auto; 
-        height: auto;
-        max-width: 150px;
-        max-height: 150px;
-      }
-  
+
+    img {
+      max-width: 100%;
+      max-height: 100%;
+      width: auto;
+      height: auto;
+      max-width: 150px;
+      max-height: 150px;
+    }
+
     .cancel-preview {
       position: absolute;
       top: 5px;
@@ -204,23 +206,23 @@ $link-color: #0077B6;
       align-items: center;
       justify-content: center;
       cursor: pointer;
-  
+
       svg {
         color: #333;
       }
     }
   }
-  
+
   .text-input {
     background-color: $sidebar-bgcolor;
     border: none;
     margin-left: 10px;
   }
-  
+
   .text-input:focus {
     outline: none;
   }
-  
+
   .options {
     display: flex;
     flex-direction: row;
@@ -230,24 +232,25 @@ $link-color: #0077B6;
     cursor: pointer;
     border-left: 1px solid $text-color;
     padding-left: 10px;
-  
+
     .icon {
       height: 1.25rem;
+      cursor: pointer;
     }
-  
+
     .send-button {
       background-color: $secondary-bgcolor;
       border: none;
       border-radius: 10px;
       padding: 10px;
       cursor: pointer;
-  
+
       .icon {
         height: 1.25rem;
       }
     }
   }
-}  
+}
 
 // Message Box
 .message-box {
@@ -277,11 +280,12 @@ $link-color: #0077B6;
     height: 40px;
     border-radius: 50%;
 
-    img{
+    img {
       width: 40px;
       height: 40px;
       border-radius: 50%;
     }
+
     span {
       font-size: 0.8rem;
       font-weight: 600;
@@ -301,10 +305,13 @@ $link-color: #0077B6;
     }
 
     img {
-      height: 20vh;
-      width: 30vw;
-      border-radius: 10px 10px 10px 0;
-      max-width: 70px;
+      max-width: 100%;
+      height: auto;
+      width: auto;
+      max-height: 30vh;
+      max-width: 30vh;
+      object-fit: contain;
+      border-radius: 10px;
     }
   }
 
@@ -333,25 +340,6 @@ $link-color: #0077B6;
         word-wrap: break-word;
         padding: 10px;
       }
-
-      img {
-        height: 20vh;
-        width: 30vw;
-        border-radius: 0 10px 10px 10px;
-        max-width: 70px;
-      }
-    }
-  }
-
-  .messageImage {
-    height: 20vh;
-    width: 20vw;
-    object-fit: cover;
-
-    img {
-      height: 100%;
-      width: 100%;
-      border-radius: 10px 0 10px 10px;
     }
   }
 }
@@ -409,9 +397,8 @@ $link-color: #0077B6;
 }
 
 .logo {
-  width: 200px; /* Adjust the width as needed */
-  height: 80px; /* Adjust the height as needed */
+  width: 200px;
+  height: 80px;
   object-fit: cover;
 }
 
-// Add any additional form styles here

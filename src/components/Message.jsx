@@ -40,7 +40,9 @@ const messageTime = message.date.toDate().toLocaleTimeString([], { hour: '2-digi
 
         </div>
         <div className="messageContent">
-          <p className="messageText">{message.text}</p>
+          {message.text && !message.img && (
+            <p className="messageText">{message.text}</p>
+          )}
           {message.img && (
             <img
               src={message.img}
