@@ -1,23 +1,13 @@
 import React, { useContext } from 'react';
-import { makeStyles } from '@mui/styles';
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
 import CssBaseline from '@mui/material/CssBaseline';
-import Divider from '@mui/material/Divider';
 import Drawer from '@mui/material/Drawer';
 import Avatar from '@mui/material/Avatar';
-import IconButton from '@mui/material/IconButton';
-import List from '@mui/material/List';
-import ListItem from '@mui/material/ListItem';
-import ListItemButton from '@mui/material/ListItemButton';
-import ListItemIcon from '@mui/material/ListItemIcon';
-import ListItemText from '@mui/material/ListItemText';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
 import Sidebar from '../components/Sidebar';
 import ChatPanel from '../components/ChatPanel';
-import VideoCallIcon from '@mui/icons-material/VideoCall';
-import MoreVertIcon from '@mui/icons-material/MoreVert';
 
 import { ChatContext } from '../context/ChatContext';
 
