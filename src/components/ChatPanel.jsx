@@ -1,43 +1,27 @@
-import React from 'react'
-import { faVideo, faEllipsisV, faImage, faFile } from '@fortawesome/free-solid-svg-icons';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import Input from './Input.jsx';
+import React, { useContext } from 'react';
+import Box from '@mui/material/Box';
 import { ChatContext } from '../context/ChatContext.jsx';
-import { useContext } from 'react';
 import Messages from './Messages.jsx';
-
+import Input from './Input.jsx';
 
 const ChatPanel = () => {
-
-  const {data} = useContext(ChatContext);
+  const { data } = useContext(ChatContext);
 
   return (
-    <div className='chat-panel-container'>
-      <div className="chat-panel">
-        <div className="chat-header">
-          <div className="user-info">
-            <img
-              src={data.user?.photoURL ? data.user?.photoURL : 'https://firebasestorage.googleapis.com/v0/b/banter-box-chatapp.appspot.com/o/avatar.png?alt=media&token=84640cd9-9353-48b9-a17a-847c9f742f1f'}
-              alt="User Avatar"
-              className="avatar"
-            />
-            <span className="user-name">{data.user?.displayName}</span>
-          </div>
-          <div className="icons">
-            <FontAwesomeIcon icon={faVideo} className="icon" />
-            <FontAwesomeIcon icon={faEllipsisV} className='icon'/>
-          </div>
-        </div>
-        
-        <Messages/>
-      
-        <Input/>
-      
+    <Box
+      sx={{
+        display: 'flex',
+        flexDirection: 'column',
+        height: '100%',
+        backgroundColor: '#f5f5f5',
+        borderRadius: 2,
+        boxShadow: 3,
+      }}
+    >
+      <Messages />
+      <Input />
+    </Box>
+  );
+};
 
-      
-      </div>
-    </div>
-  )
-}
-
-export default ChatPanel
+export default ChatPanel;

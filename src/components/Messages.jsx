@@ -1,9 +1,11 @@
 import React, { useContext, useEffect, useState, useRef } from "react";
 import { ChatContext } from "../context/ChatContext.jsx";
 import Message from "./Message.jsx";
-import { onSnapshot } from "@firebase/firestore";
-import { doc } from "firebase/firestore";
+import { onSnapshot, doc } from "@firebase/firestore";
 import { db } from "../firebase";
+import Box from '@mui/material/Box';
+import Typography from '@mui/material/Typography';
+import Divider from '@mui/material/Divider';
 
 const Messages = () => {
   const [messages, setMessages] = useState([]);
@@ -41,13 +43,13 @@ const Messages = () => {
     yesterday.setDate(yesterday.getDate() - 1);
 
     if (isSameDate(today, date)) {
-        return "Today";
+      return "Today";
     } else if (isSameDate(yesterday, date)) {
-        return "Yesterday";
+      return "Yesterday";
     } else {
-        return new Intl.DateTimeFormat('en-US', { month: 'long', day: '2-digit', year: 'numeric' }).format(date);
+      return new Intl.DateTimeFormat('en-US', { month: 'long', day: '2-digit', year: 'numeric' }).format(date);
     }
-};
+  };
 
   const isSameDate = (date1, date2) => {
     return (
@@ -58,17 +60,19 @@ const Messages = () => {
   };
 
   return (
-    <div className="chat-area" ref={chatAreaRef}>
+    <Box ref={chatAreaRef} sx={{ flexGrow: 1, overflowY: 'auto', padding: 2, bgcolor: 'background.paper', borderRadius: 1 }}>
       {getUniqueDates(messages).map((date) => (
         <React.Fragment key={date}>
-          <span className="text-center w-100">{formatDateLine(date)}</span>
+          <Typography variant="subtitle2" sx={{ textAlign: 'center', my: 1 }}>
+            {formatDateLine(date)}
+          </Typography>
+          <Divider />
           {messages.filter((message) => formatDateLine(message.date.toDate()) === formatDateLine(date)).map((m) => (
-            <Message message={m} key={m.id}/> 
+            <Message message={m} key={m.id} />
           ))}
         </React.Fragment>
       ))}
-      <Message/>
-    </div>
+    </Box>
   );
 };
 

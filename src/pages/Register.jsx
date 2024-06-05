@@ -1,36 +1,53 @@
 import React, { useState } from "react";
-import { auth, storage } from "../firebase";
+import { useNavigate, Link } from "react-router-dom";
+import { auth, storage, db } from "../firebase";
 import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
 import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
 import { doc, setDoc } from "firebase/firestore";
-import { db } from "../firebase";
-import { useNavigate, Link } from "react-router-dom";
+import {
+  Container,
+  Box,
+  Card,
+  Typography,
+  TextField,
+  Button,
+  Link as MuiLink,
+  Alert
+} from "@mui/material";
 
 const Register = () => {
   const [err, setErr] = useState(false);
-  const navigate = useNavigate();
   const [errMessage, setErrmessage] = useState("");
+  const [avatarPreview, setAvatarPreview] = useState("src/images/avatar.png");
+  const navigate = useNavigate();
+
+  const handleAvatarChange = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setAvatarPreview(reader.result);
+      };
+      reader.readAsDataURL(file);
+    }
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     const displayName = e.target.username.value;
-    console.log(displayName);
     const email = e.target.email.value;
-    console.log(email);
     const password = e.target.password.value;
     let avatar = e.target.avatar.files[0];
 
-
-    if (avatar === undefined) {
-      avatar = "https://firebasestorage.googleapis.com/v0/b/banter-box-chatapp.appspot.com/o/avatar.png?alt=media&token=84640cd9-9353-48b9-a17a-847c9f742f1f";
+    if (!avatar) {
+      avatar = await fetch("https://firebasestorage.googleapis.com/v0/b/banter-box-chatapp.appspot.com/o/avatar.png?alt=media&token=84640cd9-9353-48b9-a17a-847c9f742f1f")
+        .then(res => res.blob());
     }
 
     try {
       const res = await createUserWithEmailAndPassword(auth, email, password);
       const user = res.user;
-      console.log(user);
 
-      //Unique image name
       const data = new Date().getTime();
       const storageRef = ref(storage, `${displayName + data}`);
 
@@ -49,97 +66,112 @@ const Register = () => {
               photoURL: downloadURL,
             });
 
+            await setDoc(doc(db, "userChats", res.user.uid), {});
 
-            await setDoc(doc(db, "userChats", res.user.uid), {
-              
-            });
-              navigate("/");
+            navigate("/");
           } catch (err) {
             console.log(err);
-            SetErr(true);
-            //setLoading(false);
+            setErr(true);
           }
         });
       });
     } catch (error) {
       setErr(true);
-      //setLoading(false);
       const errorCode = error.code;
       const errorMessage = error.message;
-      console.log(errorCode, errorMessage);
       if (errorCode === "auth/email-already-in-use") {
         setErrmessage("Email already in use");
       } else if (errorCode === "auth/invalid-email") {
         setErrmessage("Invalid Email");
       } else if (errorCode === "auth/weak-password") {
-        setErrmessage(
-          "Weak Password: Password should be at least 6 characters"
-        );
+        setErrmessage("Weak Password: Password should be at least 6 characters");
       }
     }
   };
 
   return (
-    <div class="container d-flex flex-column align-items-center justify-content-center min-vh-100">
-      <img src="https://firebasestorage.googleapis.com/v0/b/banter-box-chatapp.appspot.com/o/logo.png?alt=media&token=6368418c-8212-459a-a47f-c2007036e983" alt="Logo" className="mb-4 logo" />
-      <div class="card p-4 formWrapper">
-        <p className="title">Register</p>
-        <form action="" method="post" className="form" onSubmit={handleSubmit}>
-          <div class="form-group">
-            <label for="username">Username</label>
-            <input
-              type="text"
-              class="form-control"
-              id="username"
-              name="username"
-              required
-            />
-          </div>
-          <div class="form-group">
-            <label for="email">Email</label>
-            <input
-              type="email"
-              class="form-control"
-              id="email"
-              name="email"
-              required
-            />
-          </div>
-          <div class="form-group">
-            <label for="password">Password</label>
-            <input
-              type="password"
-              class="form-control"
-              id="password"
-              name="password"
-              required
-            />
-          </div>
-
-          <div class="form-group">
-            <input
-              type="file"
-              class="form-control-file"
-              id="avatar"
-              name="avatar"
-              accept="image/*"
-              style={{ display: "none" }}
-            />
-            <label htmlFor="avatar" className="avatarLabel">
-              <img src="src/images/avatar.png" alt="" />
-              <span> Choose Avatar</span>
-            </label>
-          </div>
-          <button type="submit" class="btn btn-warning">
+    <Container
+      component="main"
+      maxWidth="xs"
+      sx={{ display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", minHeight: "100vh" }}
+    >
+      <img
+        src="https://firebasestorage.googleapis.com/v0/b/banter-box-chatapp.appspot.com/o/logo.png?alt=media&token=6368418c-8212-459a-a47f-c2007036e983"
+        alt="Logo"
+        className="mb-4 logo"
+        style={{ marginBottom: "1rem" }}
+      />
+      <Card sx={{ p: 4, width: "100%" }}>
+        <Typography component="h1" variant="h5" align="center">
+          Register
+        </Typography>
+        <Box component="form" onSubmit={handleSubmit} sx={{ mt: 1 }}>
+          <TextField
+            variant="outlined"
+            margin="normal"
+            required
+            fullWidth
+            id="username"
+            label="Username"
+            name="username"
+            autoComplete="username"
+            autoFocus
+          />
+          <TextField
+            variant="outlined"
+            margin="normal"
+            required
+            fullWidth
+            id="email"
+            label="Email Address"
+            name="email"
+            autoComplete="email"
+          />
+          <TextField
+            variant="outlined"
+            margin="normal"
+            required
+            fullWidth
+            name="password"
+            label="Password"
+            type="password"
+            id="password"
+            autoComplete="current-password"
+          />
+          <input
+            type="file"
+            id="avatar"
+            name="avatar"
+            accept="image/*"
+            style={{ display: "none" }}
+            onChange={handleAvatarChange}
+          />
+          <label htmlFor="avatar" style={{ display: "flex", alignItems: "center", cursor: "pointer" }}>
+            <img src={avatarPreview} alt="Avatar" style={{ width: "40px", marginRight: "8px" }} />
+            <Button variant="contained" component="span">
+              Choose Avatar
+            </Button>
+          </label>
+          <Button
+            type="submit"
+            fullWidth
+            variant="contained"
+            color="warning"
+            sx={{ mt: 3, mb: 2 }}
+          >
             Register
-          </button>
+          </Button>
           {err && (
-            <p style={{ color: "red", fontSize: "15px" }}>{errMessage}</p>
+            <Alert severity="error" sx={{ mt: 2 }}>
+              {errMessage}
+            </Alert>
           )}
-          <p>Have an account? <Link to="/login">Login</Link></p>
-        </form>
-      </div>
-    </div>
+          <Typography align="center">
+            Have an account? <MuiLink component={Link} to="/login">Login</MuiLink>
+          </Typography>
+        </Box>
+      </Card>
+    </Container>
   );
 };
 

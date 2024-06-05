@@ -1,42 +1,62 @@
-import { signOut } from 'firebase/auth'
-import React from 'react'
-import { auth } from '../firebase'
-import { useContext } from 'react'
-import { AuthContext } from '../context/AuthContext'
+import React, { useState, useContext } from 'react';
+import { signOut } from 'firebase/auth';
+import { auth } from '../firebase';
+import { AuthContext } from '../context/AuthContext';
+import { AppBar, Toolbar, IconButton, Typography, Avatar, Button, Box, Menu, MenuItem } from '@mui/material';
+import LogoutIcon from '@mui/icons-material/Logout';
 
 const Navbar = () => {
-
   const { currentUser } = useContext(AuthContext);
-  
+  const [anchorEl, setAnchorEl] = useState(null);
 
+  const handleClick = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
+
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
+
+  const handleLogout = () => {
+    signOut(auth);
+    handleClose();
+  };
 
   return (
-    <nav className="navbar navbar-expand-lg navbar-light bg-light">
-      <div className="container-fluid">
+    <AppBar position="static" sx={{ backgroundColor: '#FDD835' }}>
+      <Toolbar sx={{ display: 'flex', justifyContent: 'space-between', padding: '0 16px' }}>
         {/* Logo on the left */}
-        <a className="navbar-brand" href="#">
+        <Box sx={{ display: 'flex', alignItems: 'center' }}>
           <img
             src="https://firebasestorage.googleapis.com/v0/b/banter-box-chatapp.appspot.com/o/logo.png?alt=media&token=6368418c-8212-459a-a47f-c2007036e983"
             alt="Logo"
-            style={{ width: '130px', marginRight: '10px', height: '40px', objectFit: 'contain' }}
+            style={{ width: '130px', height: '40px', objectFit: 'contain' }}
           />
-        </a>
+        </Box>
 
         {/* Profile information on the right */}
-        <div className="d-flex align-items-center">
-          <img
-            src={currentUser.photoURL ? currentUser.photoURL : 'https://firebasestorage.googleapis.com/v0/b/banter-box-chatapp.appspot.com/o/avatar.png?alt=media&token=84640cd9-9353-48b9-a17a-847c9f742f1f'}
-            alt="Avatar"
-            style={{ width: '30px', height: '30px', borderRadius: '50%', marginRight: '10px' }}
-          />
-          <button className="btn btn-outline-primary btn-sm" onClick={() => signOut(auth)}>
-            Logout
-          </button>
-          
-        </div>
-      </div>
-    </nav>
-  )
+        <Box sx={{ display: 'flex', alignItems: 'center' }}>
+          <IconButton onClick={handleClick}>
+            <Avatar
+              src={currentUser.photoURL ? currentUser.photoURL : 'https://firebasestorage.googleapis.com/v0/b/banter-box-chatapp.appspot.com/o/avatar.png?alt=media&token=84640cd9-9353-48b9-a17a-847c9f742f1f'}
+              alt="Avatar"
+              sx={{ width: 30, height: 30 }}
+            />
+          </IconButton>
+          <Menu
+            anchorEl={anchorEl}
+            open={Boolean(anchorEl)}
+            onClose={handleClose}
+          >
+            <MenuItem onClick={handleLogout}>
+              <LogoutIcon sx={{ mr: 1 }} />
+              Logout
+            </MenuItem>
+          </Menu>
+        </Box>
+      </Toolbar>
+    </AppBar>
+  );
 }
 
-export default Navbar
+export default Navbar;
